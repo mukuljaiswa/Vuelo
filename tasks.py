@@ -17,7 +17,8 @@ class SierraDimensionsTasks:
             "confirm_password": self.user.password,
             "terms_accepted": True
         }
-        print(f"User {self.user.user_id} registration data: {user_data}")
+        signup_success = False
+        otp_success = False
 
         with self.user.client.post(
             "/api/v1/public/signup",
@@ -25,19 +26,20 @@ class SierraDimensionsTasks:
             name="1. User Signup",
             catch_response=True
         ) as response:
-            print(f"User {self.user.user_id} Signup Response: {response.text}")
-            if response.status_code != 201:
+            if response.status_code == 201:
+                print(f"User {self.user.user_id} Signup Response: {response.text}")
+                signup_success = True
+            else:
                 response.failure(f"Signup failed: {response.text}")
-            elif response.cookies:
-                self.user.session_cookies.update(response.cookies)
-                print(f"User {self.user.user_id} updated session cookies from signup")
+
+        if not signup_success:
+            return
 
         otp_data = {
             "contact": user_data["email"],
             "otp": "000000",
             "verify_type": "SIGNUP"
         }
-        print(f"User {self.user.user_id} OTP verification data: {otp_data}")
 
         with self.user.client.post(
             "/api/v1/public/verify",
@@ -45,21 +47,22 @@ class SierraDimensionsTasks:
             name="2. Verify OTP (SIGNUP)",
             catch_response=True
         ) as response:
-            print(f"User {self.user.user_id} OTP Verification Response: {response.text}")
             if response.status_code in (200, 201):
+                print(f"User {self.user.user_id} OTP Verification Response: {response.text}")
+                otp_success = True
                 if response.cookies:
                     self.user.session_cookies.update(response.cookies)
-                    print(f"User {self.user.user_id} updated session cookies from OTP verification")
                 try:
                     response_data = response.json()
                     if response_data.get('success'):
-                        self.user.auth_token = response_data.get('data', {}).get('token')
-                        print(f"User {self.user.user_id} auth token received: {self.user.auth_token}")
                         CredentialManager.save_credentials(user_data["email"], self.user.password, self.user.user_id)
                 except json.JSONDecodeError:
                     response.failure("Invalid JSON response")
             else:
                 response.failure(f"OTP verification failed: {response.text}")
+
+        if not otp_success:
+            return
 
         if self.user.session_cookies:
             print(f"User {self.user.user_id} attempting to get user profile")
@@ -81,6 +84,9 @@ class SierraDimensionsTasks:
             return
 
         print(f"User {self.user.user_id} attempting login with email: {email}")
+        login_success = False
+        otp_success = False
+
         with self.user.client.post(
             "/api/v1/public/login",
             json={"contact": email, "password": password},
@@ -88,18 +94,19 @@ class SierraDimensionsTasks:
             catch_response=True
         ) as response:
             print(f"User {self.user.user_id} Login Response: {response.text}")
-            if response.status_code != 201:
+            if response.status_code == 201:
+                login_success = True
+            else:
                 response.failure(f"Login failed: {response.text}")
-            elif response.cookies:
-                self.user.session_cookies.update(response.cookies)
-                print(f"User {self.user.user_id} updated session cookies from login")
+
+        if not login_success:
+            return
 
         otp_data = {
             "contact": email,
             "otp": "000000",
             "verify_type": "LOGIN"
         }
-        print(f"User {self.user.user_id} Login OTP data: {otp_data}")
 
         with self.user.client.post(
             "/api/v1/public/verify",
@@ -107,20 +114,16 @@ class SierraDimensionsTasks:
             name="2. Verify OTP (LOGIN)",
             catch_response=True
         ) as response:
-            print(f"User {self.user.user_id} Login OTP Verification Response: {response.text}")
             if response.status_code in (200, 201):
+                print(f"User {self.user.user_id} Login OTP Verification Response: {response.text}")
+                otp_success = True
                 if response.cookies:
                     self.user.session_cookies.update(response.cookies)
-                    print(f"User {self.user.user_id} updated session cookies from login OTP")
-                try:
-                    response_data = response.json()
-                    if response_data.get('success'):
-                        self.user.auth_token = response_data.get('data', {}).get('token')
-                        print(f"User {self.user.user_id} login auth token received: {self.user.auth_token}")
-                except json.JSONDecodeError:
-                    response.failure("Invalid JSON response")
             else:
                 response.failure(f"Login OTP verification failed: {response.text}")
+
+        if not otp_success:
+            return
 
         if self.user.session_cookies:
             print(f"User {self.user.user_id} attempting to get user profile after login")

@@ -66,7 +66,6 @@ class UserUtils:
     @staticmethod
     def generate_random_name(user_id, length=8):
         name = ''.join(random.choice(string.ascii_letters) for _ in range(length)).capitalize()
-        print(f"User {user_id} generated name: {name}")
         return name
 
     @staticmethod
@@ -74,7 +73,6 @@ class UserUtils:
         timestamp = datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S")
         random_part = uuid.uuid4().hex[:8]
         email = f"loadtest_{random_part}_{timestamp}@yopmail.com"
-        print(f"User {user_id} generated email: {email}")
         return email
 
     @staticmethod
@@ -87,5 +85,4 @@ class UserUtils:
         ]
         random.shuffle(components)
         password = ''.join(components)
-        print(f"User {user_id} generated password: {password}")
         return password
