@@ -33,14 +33,14 @@ class CredentialManager:
 
     @classmethod
     def load_user_credentials(cls):
-        csv_path = 'users/users_login_credentials.csv'
+        csv_path = 'users/login_credentials.csv'
         if os.path.exists(csv_path):
             with open(csv_path, 'r', encoding='utf-8') as csvfile:
                 reader = csv.DictReader(csvfile)
                 cls._user_credentials = list(reader)
                 print(f"Loaded {len(cls._user_credentials)} user credentials")
         else:
-            print("Warning: No credentials file found at users/users_login_credentials.csv")
+            print("Warning: No credentials file found at users/login_credentials.csv")
 
     @classmethod
     def get_next_credentials(cls):
@@ -86,3 +86,14 @@ class UserUtils:
         random.shuffle(components)
         password = ''.join(components)
         return password
+
+
+    @staticmethod
+    def generate_random_phone_number():
+        # Generate a random 10-digit number starting with 6, 7, 8, or 9
+        first_digit = str(random.choice([6, 7, 8, 9]))
+        remaining_digits = ''.join(str(random.randint(0, 9)) for _ in range(9))
+        phone_number = first_digit + remaining_digits
+        return f'+91{phone_number}'
+
+    

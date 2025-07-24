@@ -4,7 +4,7 @@ from tasks import SierraDimensionsTasks
 from utils import CredentialManager, UserUtils
 
 class SierraDimensionsUser(HttpUser):
-    wait_time = between(0.5, 1.5)
+    wait_time = between(1, 3)
     host = "https://qa-api.sierradimensions.com"
 
     def __init__(self, *args, **kwargs):
@@ -22,9 +22,9 @@ class SierraDimensionsUser(HttpUser):
     def on_start(self):
         print(f"\n=== User {self.user_id} started ===")
 
-    @task(1)
-    def test_user_registration_flow(self):
-        self.tasks_impl.test_user_registration_flow()
+    # @task(1)
+    # def test_user_registration_flow(self):
+    #     self.tasks_impl.test_user_registration_flow()
 
     @task(1)
     def test_user_login_flow(self):
