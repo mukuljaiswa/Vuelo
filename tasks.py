@@ -55,12 +55,6 @@ class SierraDimensionsTasks:
                 try:
                     CredentialManager.save_credentials(user_data["email"], self.user.password, self.user.user_id)
                     print(f"User {self.user.user_id} successfully registered and logged in")
-
-                    # response_data = response.json()
-                    # print('Response Data:', response_data)
-                    # if response_data.get('Authentication successful'):
-                    #     print(f"User {self.user.user_id} successfully registered and logged in")
-                    #     CredentialManager.save_credentials(user_data["email"], self.user.password, self.user.user_id)
                 except json.JSONDecodeError:
                     response.failure("Invalid JSON response")
             else:
@@ -144,7 +138,7 @@ class SierraDimensionsTasks:
             ) as response:
                 print(f"User {self.user.user_id} Post-Login Profile Response: {response.text}")
                 if response.status_code != 200:
-                    response.failure(f"Profile fetch failed: {response.text}")
+                     response.failure(f"Profile fetch failed: {response.text}")
 
             # User Add Nominee List After Login.......................
 
@@ -161,7 +155,7 @@ class SierraDimensionsTasks:
             with self.user.client.post(
                 "/api/v1/user/profile/nominee",
                 json=nominee_data,
-                name="2. Verify Add Nominee (After Login)  API",
+                name="4. Verify Add Nominee (After Login)  API",
                 catch_response=True
             ) as response:
 
@@ -179,7 +173,7 @@ class SierraDimensionsTasks:
             with self.user.client.get(
                 "/api/v1/user/profile/nominee/list",
                 cookies=self.user.session_cookies,
-                name="3. User NomineeList (After Login) API",
+                name="5. User NomineeList (After Login) API",
                 catch_response=True
             ) as response:
                 print(f"User {self.user.user_id} Post-Login NomineeList : {response.text}")
@@ -211,7 +205,7 @@ class SierraDimensionsTasks:
             with self.user.client.put(
                 "/api/v1/user/profile/nominee",
                 json=update_nominee_data,
-                name="2. Update Nominee (After Login)  API",
+                name="6. Update Nominee (After Login)  API",
                 catch_response=True
             ) as response:
                 if response.status_code == 200:
@@ -233,7 +227,7 @@ class SierraDimensionsTasks:
                 with self.user.client.delete(
                     f"/api/v1/user/profile/nominee",
                     json=delete_data,
-                    name="3. Delete Nominee (After Login) API",
+                    name="7. Delete Nominee (After Login) API",
                     catch_response=True
                 ) as response:
                     if response.status_code == 200:
@@ -245,7 +239,7 @@ class SierraDimensionsTasks:
             with self.user.client.get(
                 "/api/v1/user/profile/details",
                # cookies=self.user.session_cookies,
-                name="4. Get User Profile Details(After Login) API",
+                name="8. Get User Profile Details(After Login) API",
                 catch_response=True
             ) as response:
                 print(f"User {self.user.user_id} Post-Login Profile Details: {response.text}")
@@ -257,21 +251,43 @@ class SierraDimensionsTasks:
             with self.user.client.get(
                 "/api/v1/user/profile/avatars",
                 #cookies=self.user.session_cookies,
-                name="5. Get User Profile Avatars (After Login) API",
+                name="9. Get User Profile Avatars (After Login) API",
                 catch_response=True
             ) as response:
                 print(f"User {self.user.user_id} Post-Login Profile Avatars: {response.text}")
                 if response.status_code != 200:
                     response.failure(f"Profile avatars fetch failed: {response.text}") 
 
-            #Upload profile-picture 
+
+
+            upload_avtar= {"avatarId":"f82e86ea-e0d7-462e-9704-8d54a847b19c"}
+
+            with self.user.client.put(
+                "/api/v1/user/profile/profile-picture/avatar",
+                json=upload_avtar,
+                name="10. Upload Profile Avtar Picture (After Login) API",
+                catch_response=True
+            ) as response:
+
+
+                if response.status_code == 200:
+                    print(f"User {self.user.user_id} Upload Profile Avtar Response: {response.text}")
+                    if response.cookies:
+                        self.user.session_cookies.update(response.cookies)
+                else:
+                    response.failure(f"Upload Profile Avtar {response.text}")
+
+
+        #      # Upload profile-picture 
             with open('/data/Vuelo/profile-image/varanasi.jpg', 'rb') as profile_picture:
-                files = {'image': profile_picture}
+                print('Inside profile picture upload')
+                files = {'image': ('varanasi.jpg', profile_picture, 'image/jpeg')}
+                
                 with self.user.client.post(
                     "/api/v1/user/profile/profile-picture/upload",
                     files=files,
-                    #cookies=self.user.session_cookies,
-                    name="6. Upload Profile Picture (After Login) API",
+
+                    name="11. Upload Profile Picture (After Login) API",
                     catch_response=True
                 ) as response:
                     if response.status_code == 201:
@@ -279,4 +295,16 @@ class SierraDimensionsTasks:
                     else:
                         response.failure(f"Profile picture upload failed: {response.text}")
 
+
+           #Delete profile-picture
+            with self.user.client.delete(
+                "/api/v1/user/profile/profile-picture",
+                #cookies=self.user.session_cookies,
+                name="12. Delete Profile Picture (After Login) API",
+                catch_response=True
+            ) as response:
+                if response.status_code == 200:
+                    print(f"User {self.user.user_id} Profile Picture Delete Response: {response.text}")
+                else:
+                    response.failure(f"Profile picture delete failed: {response.text}")
 
