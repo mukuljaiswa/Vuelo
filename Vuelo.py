@@ -1,11 +1,16 @@
-# === File: Vuelo.py ===
 from locust import HttpUser, between, task
 from tasks import SierraDimensionsTasks
 from utils import CredentialManager, UserUtils
+from dotenv import load_dotenv
+import os
+
+
+# Load variables from .env
+load_dotenv()
 
 class SierraDimensionsUser(HttpUser):
     wait_time = between(1, 3)
-    host = "https://qa-api.sierradimensions.com"
+    host = os.getenv("HOST")  # Get from .env
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
