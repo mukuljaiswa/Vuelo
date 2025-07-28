@@ -62,21 +62,21 @@ class CredentialManager:
                 writer.writerow([email, password])
             cls.load_user_credentials()
 
-class UserUtils:
+class CredentialManagerUserUtils:
     @staticmethod
-    def generate_random_name(user_id, length=8):
+    def generate_random_name(length=8):
         name = ''.join(random.choice(string.ascii_letters) for _ in range(length)).capitalize()
         return name
 
     @staticmethod
-    def generate_dynamic_email(user_id):
+    def generate_dynamic_email():
         timestamp = datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S")
         random_part = uuid.uuid4().hex[:8]
         email = f"loadtest_{random_part}_{timestamp}@yopmail.com"
         return email
 
     @staticmethod
-    def generate_strong_password(user_id):
+    def generate_strong_password():
         components = [
             random.choice('!@#$%^&*'),
             random.choice(string.ascii_uppercase),

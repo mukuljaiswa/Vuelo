@@ -1,6 +1,6 @@
 from locust import HttpUser, between, task
 from tasks import SierraDimensionsTasks
-from utils import CredentialManager, UserUtils
+from utils import CredentialManager, CredentialManager
 from dotenv import load_dotenv
 import os
 
@@ -27,10 +27,10 @@ class SierraDimensionsUser(HttpUser):
     def on_start(self):
         print(f"\n=== User {self.user_id} started ===")
 
-    @task(1)
-    def test_user_registration_flow(self):
-        self.tasks_impl.test_user_registration_flow()
-
     # @task(1)
-    # def test_user_login_flow(self):
-    #     self.tasks_impl.test_user_login_flow()
+    # # def test_user_registration_flow(self):
+    # #     self.tasks_impl.test_user_registration_flow()
+
+    @task(1)
+    def test_user_login_flow(self):
+        self.tasks_impl.test_user_login_flow()
