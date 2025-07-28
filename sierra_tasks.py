@@ -49,8 +49,6 @@ class Tasks:
         ) as response:
             if response.status_code in (200, 201):
                 print(f"User {self.user.user_id} OTP Verification Response: {response.text}")
-                if response.cookies:
-                    self.user.session_cookies.update(response.cookies)
                 return True
             else:
                 response.failure(f"OTP verification failed: {response.text}")
@@ -59,7 +57,6 @@ class Tasks:
     def get_user_profile(self):
         with self.user.client.get(
             "/api/v1/user/me",
-            cookies=self.user.session_cookies,
             name="3. Get User Profile API",
             catch_response=True
         ) as response:
@@ -103,15 +100,12 @@ class Tasks:
         ) as response:
             if response.status_code == 201:
                 print(f"User {self.user.user_id} Nominee Add Response: {response.text}")
-                if response.cookies:
-                    self.user.session_cookies.update(response.cookies)
             else:
                 response.failure(f"Add Nominee Failed: {response.text}")
 
     def get_nominee_list(self):
         with self.user.client.get(
             "/api/v1/user/profile/nominee/list",
-            cookies=self.user.session_cookies,
             name="6. Get Nominee List API",
             catch_response=True
         ) as response:

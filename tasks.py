@@ -37,54 +37,54 @@ class SierraDimensionsTasks:
     # ------------------------------
     # Login Flow
     # ------------------------------
-    # def test_user_login_flow(self):
-    #     print(f"\nUser {self.user.user_id} starting login flow")
+    def test_user_login_flow(self):
+        print(f"\nUser {self.user.user_id} starting login flow")
 
-    #     #Login user
-    #     loginsuccess,email=Tasks.login(self)
+        #Login user
+        loginsuccess,email=Tasks.login(self)
 
-    #     if not loginsuccess: 
-    #         print("Login failed")
-    #         return
+        if not loginsuccess: 
+            print("Login failed")
+            return
         
-    #     #Verify OTP after login
-    #     otp_success=Tasks.verify_otp(self, email ,"LOGIN")
+        #Verify OTP after login
+        otp_success=Tasks.verify_otp(self, email ,"LOGIN")
 
-    #     if not otp_success:
-    #         print("OTP verification failed:")
-    #         return
+        if not otp_success:
+            print("OTP verification failed:")
+            return
 
-    #     #Get User Profile
-    #     Tasks.get_user_profile(self)    
+        #Get User Profile
+        Tasks.get_user_profile(self)    
 
-    #      # User Add Nominee List After Login.......................
-    #     Tasks.add_nominee(self)
+         # User Add Nominee List After Login.......................
+        Tasks.add_nominee(self)
 
-    #     # User Nominee List After Login..................
-    #     nominee_id=Tasks.get_nominee_list(self)
-    #     print(f"User {self.user.user_id} Nominee ID: {nominee_id}") 
+        # User Nominee List After Login..................
+        nominee_id=Tasks.get_nominee_list(self)
+        print(f"User {self.user.user_id} Nominee ID: {nominee_id}") 
 
-    #     #Update User Nominee List After Login..................
-    #     Tasks.update_nominee(self,nominee_id)
+        #Update User Nominee List After Login..................
+        Tasks.update_nominee(self,nominee_id)
 
 
-    #     # Delete User Nominee List After Login..................
-    #     Tasks.delete_nominee(self,nominee_id)
+        # Delete User Nominee List After Login..................
+        Tasks.delete_nominee(self,nominee_id)
 
-    #     # #Get Profile Details After Login..................
-    #     Tasks.get_profile_details(self)
+        # #Get Profile Details After Login..................
+        Tasks.get_profile_details(self)
 
-    #     #Get profile avatars
-    #     Tasks.get_avatars(self)
+        #Get profile avatars
+        Tasks.get_avatars(self)
 
-    #     #Upload profile-picture  (Avatar)
-    #     Tasks.upload_avatar(self)
+        #Upload profile-picture  (Avatar)
+        Tasks.upload_avatar(self)
 
-    #     #Upload profile-picture
-    #     Tasks.upload_profile_picture(self)
+        #Upload profile-picture
+        Tasks.upload_profile_picture(self)
 
-    #     #Delete profile-picture
-    #     Tasks.delete_profile_picture(self)
+        #Delete profile-picture
+        Tasks.delete_profile_picture(self)
 
 
 

@@ -27,9 +27,9 @@ class SierraDimensionsUser(HttpUser):
     def on_start(self):
         print(f"\n=== User {self.user_id} started ===")
 
-    # @task(1)
-    # # def test_user_registration_flow(self):
-    # #     self.tasks_impl.test_user_registration_flow()
+    @task(1)
+    def test_user_registration_flow(self):
+        self.tasks_impl.test_user_registration_flow()
 
     @task(1)
     def test_user_login_flow(self):
