@@ -104,7 +104,7 @@ class CredentialManager:
                 return None, None
 
             cred = cls._local_credentials[cls._local_credential_index]
-            print(f"[Worker {cls._worker_index}] Using credential index {cls._local_credential_index}: {cred['email']}")
+            print(f"[Worker {cls._worker_index}] Using local credential index {cls._local_credential_index}: {cred['email']}")
 
             cls._local_credential_index = (cls._local_credential_index + 1) % len(cls._local_credentials)
             return cred['email'], cred['password']
